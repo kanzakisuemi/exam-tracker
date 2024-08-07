@@ -1,4 +1,4 @@
-# exam-tracker
+# Acompanhamento Simples de Exames Médicos
 Um projeto desenvolvido no Rebase Labs para o rastreamento e gerenciamento de exames médicos. Esta aplicação web permite a listagem e visualização de exames, com suporte para importação de dados e exibição de resultados de forma intuitiva.
 
 ### Funcionalidades
