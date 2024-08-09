@@ -1,0 +1,52 @@
+version: '3'
+services:
+  web:
+    image: ruby:3.1
+    ports:
+      - "8888:8888"
+    volumes:
+      - ".:/app"
+    working_dir: /app
+    command: bash -c 'bundle install && ruby db/set_db.rb && bundle exec puma -C puma.rb'
+    depends_on:
+      - db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: exam_db
+
+  db:
+    image: postgres:14
+    container_name: db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: exam_db
+    # volumes:
+    #   - postgres_data:/var/lib/postgresql/data
+
+  test:
+    image: ruby:3.1
+    container_name: test
+    volumes:
+      - ".:/app"
+    working_dir: /app
+    command: bash -c 'bundle install && bundle exec rspec'
+    depends_on:
+      - db
+    environment:
+      - RACK_ENV=test
+
+  setup:
+    image: ruby:3.1
+    volumes:
+      - ".:/app"
+    working_dir: /app
+    command: bash -c 'bundle install && ruby db/set_db.rb'
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgres://user:password@db:5432/exam_db
+
+volumes:
+  postgres_data:
