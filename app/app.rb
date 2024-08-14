@@ -17,10 +17,15 @@ rescue PG::Error => e
   { error: e.message }.to_json
 end
 
-get '/tests' do
+get '/exams' do
   handle_request do
-    results = Database.fetch_all_exam_data
-    results.map { |row| row }.to_json
+    data = Database.fetch_formatted_exams.to_json
+  end
+end
+
+get '/exams/raw' do
+  handle_request do
+    data = Database.fetch_raw_exams.to_json
   end
 end
 

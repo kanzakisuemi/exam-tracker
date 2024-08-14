@@ -167,23 +167,23 @@ module Database
     insert_data(read_from_csv(csv_file), conn)
   end
 
-  def self.fetch_all_exam_data
+  def self.fetch_raw_exams
     conn = connect_to_db
     query = <<-SQL
       SELECT
+        e.token AS result_token,
+        e.date AS result_date,
         p.cpf,
-        p.name AS patient_name,
-        p.email AS patient_mail,
-        p.birthday AS patient_birthday,
-        p.address AS patient_address,
-        p.city AS patient_city,
-        p.state AS patient_state,
-        d.crm AS medic_crm,
-        d.crm_state AS medic_crm_state,
-        d.name AS medic_name,
-        d.email AS medic_mail,
-        e.token AS exam_token,
-        e.date AS exam_date,
+        p.name,
+        p.email,
+        p.birthday,
+        p.address,
+        p.city,
+        p.state,
+        d.crm,
+        d.crm_state,
+        d.name AS doctor_name,
+        d.email AS doctor_email,
         e.type AS exam_type,
         er.limits AS exam_type_range,
         er.result AS exam_result
@@ -195,7 +195,37 @@ module Database
 
     results = conn.exec(query)
     conn.close
-    results
+    results.map { |row| row }
+  end
+
+  def self.format_results(results)
+    results.group_by { |row| [row['result_token'], row['result_date'], row['cpf']] }.map do |(token, date, cpf), rows|
+      {
+        "result_token" => token,
+        "result_date" => date,
+        "cpf" => cpf,
+        "name" => rows.first['name'],
+        "email" => rows.first['email'],
+        "birthday" => rows.first['birthday'],
+        "doctor" => {
+          "crm" => rows.first['crm'],
+          "crm_state" => rows.first['crm_state'],
+          "name" => rows.first['doctor_name']
+        },
+        "exams" => rows.map do |row|
+          {
+            "type" => row['exam_type'],
+            "limits" => row['exam_type_range'],
+            "result" => row['exam_result']
+          }
+        end
+      }
+    end
+  end
+
+  def self.fetch_formatted_exams
+    results = fetch_raw_exams
+    formatted_results = format_results(results)
   end
 end
 
