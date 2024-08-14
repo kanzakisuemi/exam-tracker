@@ -1,12 +1,12 @@
 require 'pg'
 
-class Exam
+class Patient
   def initialize
     @conn = PG.connect(host: 'db', dbname: 'exam_db', user: 'user', password: 'password')
   end
 
   def all
-    result = @conn.exec('SELECT * FROM exams')
+    result = @conn.exec('SELECT * FROM patients')
     result.map { |row| row }
   end
 

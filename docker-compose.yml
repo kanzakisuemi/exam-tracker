@@ -7,7 +7,7 @@ services:
     volumes:
       - ".:/app"
     working_dir: /app
-    command: bash -c 'bundle install && ruby db/set_db.rb && bundle exec puma -C puma.rb'
+    command: bash -c 'bundle install && bundle exec puma -C puma.rb'
     depends_on:
       - db
     environment:
@@ -37,16 +37,26 @@ services:
     environment:
       - RACK_ENV=test
 
+  lint:
+    image: ruby:3.1
+    container_name: lint
+    volumes:
+      - ".:/app"
+    working_dir: /app
+    command: bash -c 'bundle install && bundle exec rubocop'
+    depends_on:
+      - db
+
   setup:
     image: ruby:3.1
     volumes:
       - ".:/app"
     working_dir: /app
-    command: bash -c 'bundle install && ruby db/set_db.rb'
+    command: bash -c 'bundle install && ruby db/initialize_db.rb'
     depends_on:
       - db
     environment:
       DATABASE_URL: postgres://user:password@db:5432/exam_db
 
-volumes:
-  postgres_data:
+# volumes:
+#   postgres_data:
