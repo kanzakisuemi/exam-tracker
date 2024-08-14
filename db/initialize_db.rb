@@ -166,6 +166,37 @@ module Database
     create_all_tables(conn)
     insert_data(read_from_csv(csv_file), conn)
   end
+
+  def self.fetch_all_exam_data
+    conn = connect_to_db
+    query = <<-SQL
+      SELECT
+        p.cpf,
+        p.name AS patient_name,
+        p.email AS patient_mail,
+        p.birthday AS patient_birthday,
+        p.address AS patient_address,
+        p.city AS patient_city,
+        p.state AS patient_state,
+        d.crm AS medic_crm,
+        d.crm_state AS medic_crm_state,
+        d.name AS medic_name,
+        d.email AS medic_mail,
+        e.token AS exam_token,
+        e.date AS exam_date,
+        e.type AS exam_type,
+        er.limits AS exam_type_range,
+        er.result AS exam_result
+      FROM exams e
+      JOIN patients p ON e.id_patient = p.id
+      JOIN doctors d ON e.id_doctor = d.id
+      LEFT JOIN exam_results er ON e.id = er.id_exam
+    SQL
+
+    results = conn.exec(query)
+    conn.close
+    results
+  end
 end
 
 Database.process_csv_file(File.read('db/data.csv'))

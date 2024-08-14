@@ -2,6 +2,7 @@ require_relative 'exam'
 require_relative 'exam_result'
 require_relative 'doctor'
 require_relative 'patient'
+require_relative '../db/initialize_db'
 require 'sinatra'
 require 'json'
 
@@ -14,6 +15,13 @@ def handle_request
 rescue PG::Error => e
   status 500
   { error: e.message }.to_json
+end
+
+get '/tests' do
+  handle_request do
+    results = Database.fetch_all_exam_data
+    results.map { |row| row }.to_json
+  end
 end
 
 get '/exames' do
