@@ -88,6 +88,13 @@ GEM
       parser (>= 3.3.1.0)
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
+    rubyzip (2.3.2)
+    selenium-webdriver (4.23.0)
+      base64 (~> 0.2)
+      logger (~> 1.4)
+      rexml (~> 3.2, >= 3.2.5)
+      rubyzip (>= 1.2.2, < 3.0)
+      websocket (~> 1.0)
     sinatra (4.0.0)
       mustermann (~> 3.0)
       rack (>= 3.0.0, < 4)
@@ -105,6 +112,8 @@ GEM
     unicode-display_width (2.5.0)
     uri (0.13.0)
     webrick (1.8.1)
+    websocket (1.2.11)
+    will_paginate (4.0.1)
     xpath (3.2.0)
       nokogiri (~> 1.8)
 
@@ -123,8 +132,10 @@ DEPENDENCIES
   rackup
   rspec
   rubocop
+  selenium-webdriver
   sinatra
   sinatra-contrib
+  will_paginate
 
 BUNDLED WITH
    2.3.27

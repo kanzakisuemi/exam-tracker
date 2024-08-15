@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe 'API objects', type: :api do
+RSpec.describe 'classes endpoints', type: :api do
   describe 'GET /exames' do
     it 'returns all exams' do
       get '/exames'
@@ -15,6 +15,7 @@ RSpec.describe 'API objects', type: :api do
       get '/pacientes'
       expect(last_response).to be_ok
       expect(last_response.content_type).to eq 'application/json'
+      expect(JSON.parse(last_response.body)).to include JSON.parse(Patient.all.first.to_json)
     end
   end
 
@@ -23,6 +24,7 @@ RSpec.describe 'API objects', type: :api do
       get '/medicos'
       expect(last_response).to be_ok
       expect(last_response.content_type).to eq 'application/json'
+      expect(JSON.parse(last_response.body)).to include JSON.parse(Doctor.all.first.to_json)
     end
   end
 
@@ -31,6 +33,7 @@ RSpec.describe 'API objects', type: :api do
       get '/resultados'
       expect(last_response).to be_ok
       expect(last_response.content_type).to eq 'application/json'
+      expect(JSON.parse(last_response.body)).to include JSON.parse(ExamResult.all.first.to_json)
     end
   end
 end

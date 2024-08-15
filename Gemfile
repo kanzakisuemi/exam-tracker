@@ -1,14 +1,19 @@
 source "https://rubygems.org"
 
-gem 'capybara'
 gem 'csv'
 gem 'faraday'
 gem 'json'
 gem 'pg'
 gem 'puma'
+gem 'rackup'
+gem 'rubocop'
 gem 'sinatra'
 gem 'sinatra-contrib'
-gem 'rspec'
-gem 'rackup'
-gem 'rack-test'
-gem 'rubocop'
+gem 'will_paginate'
+
+group :test do
+  gem 'capybara'
+  gem 'rack-test'
+  gem 'rspec'
+  gem 'selenium-webdriver'
+end

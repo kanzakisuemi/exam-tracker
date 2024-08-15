@@ -1,0 +1,24 @@
+.pagination-number,
+.pagination-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0.2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.4rem;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.pagination-number:hover,
+.pagination-btn:hover {
+  color: pink;
+}
+
+.pagination-number.active {
+  color: pink;
+  font-weight: 600;
+  border: 1px solid pink;
+}
