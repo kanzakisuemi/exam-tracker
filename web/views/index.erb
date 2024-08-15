@@ -1,0 +1,11 @@
+<p>voce está no index da web</p>
+<% @patients.each do |patient| %>
+  <p><%= patient[:name] %></p>
+<% end %>
+<% @doctors.each do |doctor| %>
+  <p><%= doctor[:name] %></p>
+<% end %>
+<% @exams.each do |exam| %>
+  <p><%= exam[:type] %></p>
+<% end %>
+
