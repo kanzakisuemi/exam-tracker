@@ -1,9 +1,10 @@
-require_relative 'exam'
-require_relative 'exam_result'
-require_relative 'doctor'
-require_relative 'patient'
+require_relative 'models/exam'
+require_relative 'models/exam_result'
+require_relative 'models/doctor'
+require_relative 'models/patient'
 require_relative '../db/initialize_db'
 require 'sinatra'
+require 'sinatra/json'
 require 'json'
 
 configure do
@@ -19,37 +20,37 @@ end
 
 get '/exams' do
   handle_request do
-    data = Database.fetch_formatted_exams.to_json
+    json data = Database.fetch_formatted_exams
   end
 end
 
 get '/exams/raw' do
   handle_request do
-    data = Database.fetch_raw_exams.to_json
+    json data = Database.fetch_raw_exams
   end
 end
 
 get '/exames' do
   handle_request do
-    Exam.all.to_json
+    json Exam.all
   end
 end
 
 get '/pacientes' do
   handle_request do
-    Patient.all.to_json
+    json Patient.all
   end
 end
 
 get '/medicos' do
   handle_request do
-    Doctor.all.to_json
+    json Doctor.all
   end
 end
 
 get '/resultados' do
   handle_request do
-    ExamResult.all.to_json
+    json ExamResult.all
   end
 end
 
