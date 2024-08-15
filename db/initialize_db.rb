@@ -25,13 +25,13 @@ module Database
   def self.create_patients_table(conn)
     conn.exec('CREATE TABLE IF NOT EXISTS patients (
                  id SERIAL PRIMARY KEY,
-                 cpf CHAR(20) UNIQUE NOT NULL,
+                 cpf CHAR(14) UNIQUE NOT NULL,
                  name VARCHAR(150),
                  email VARCHAR(150),
                  birthday DATE,
                  address VARCHAR(300),
-                 city VARCHAR(150),
-                 state VARCHAR(100)
+                 city VARCHAR(80),
+                 state VARCHAR(80)
                )')
   end
 
@@ -198,6 +198,38 @@ module Database
     results.map { |row| row }
   end
 
+  def self.fetch_raw_exams_by_token(token)
+    conn = connect_to_db
+    query = <<-SQL
+      SELECT
+        e.token AS result_token,
+        e.date AS result_date,
+        p.cpf,
+        p.name,
+        p.email,
+        p.birthday,
+        p.address,
+        p.city,
+        p.state,
+        d.crm,
+        d.crm_state,
+        d.name AS doctor_name,
+        d.email AS doctor_email,
+        e.type AS exam_type,
+        er.limits AS exam_type_range,
+        er.result AS exam_result
+      FROM exams e
+      JOIN patients p ON e.id_patient = p.id
+      JOIN doctors d ON e.id_doctor = d.id
+      LEFT JOIN exam_results er ON e.id = er.id_exam
+      WHERE e.token = $1
+    SQL
+
+    results = conn.exec_params(query, [token])
+    conn.close
+    results.map { |row| row }
+  end
+
   def self.format_results(results)
     results.group_by { |row| [row['result_token'], row['result_date'], row['cpf']] }.map do |(token, date, cpf), rows|
       {
@@ -223,9 +255,14 @@ module Database
     end
   end
 
+  def self.fetch_formatted_exams_by_token(token)
+    results = fetch_raw_exams_by_token(token)
+    format_results(results).first
+  end
+
   def self.fetch_formatted_exams
     results = fetch_raw_exams
-    formatted_results = format_results(results)
+    format_results(results)
   end
 end
 

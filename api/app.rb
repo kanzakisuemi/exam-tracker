@@ -18,16 +18,14 @@ rescue PG::Error => e
   { error: e.message }.to_json
 end
 
-get '/exams' do
-  handle_request do
-    json data = Database.fetch_formatted_exams
-  end
+get '/exams/:token' do
+  content_type :json
+  json Database.fetch_formatted_exams_by_token(params[:token])
 end
 
-get '/exams/raw' do
-  handle_request do
-    json data = Database.fetch_raw_exams
-  end
+get '/exams' do
+  content_type :json
+  json Database.fetch_formatted_exams
 end
 
 get '/exames' do
