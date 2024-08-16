@@ -1,10 +1,31 @@
-require 'faraday'
-require 'json'
 require 'csv'
+require 'faraday'
+require 'faraday/multipart'
+require 'json'
+require 'rack/cors'
+require 'rack/session/cookie'
+require 'securerandom'
 require 'sinatra'
 require 'sinatra/flash'
 require 'will_paginate'
 require 'will_paginate/array'
+
+use Rack::Session::Cookie, 
+  key: 'rack.session', 
+  path: '/', 
+  secret: SecureRandom.hex(64),
+  same_site: :none,
+  secure: true
+
+use Rack::Cors do
+  allow do
+    origins 'http://api:7777'
+    resource '*',
+      headers: :any,
+      methods: [:get, :post, :put, :patch, :delete, :options, :head],
+      credentials: true
+  end
+end
 
 enable :sessions
 register Sinatra::Flash
@@ -52,6 +73,7 @@ def fetch_exams_through_token(token)
 end
 
 get '/' do
+  puts 'Hello, world!'
   page = params[:page] ? params[:page].to_i : 1
   per_page = 15
   @pagination = fetch_formatted_exams(page:, per_page:)
@@ -71,20 +93,23 @@ end
 post '/import' do
   if params[:csv_file]
     tempfile = params[:csv_file][:tempfile]
-    csv_content = tempfile.read
-    
-    response = Faraday.post('http://api:7777/import', csv_content, 'Content-Type' => 'text/csv')
-    
-    if response.status == 200
-      result = JSON.parse(response.body)
-      flash[:notice] = result['message']
-    else
-      flash[:error] = JSON.parse(response.body)['error']
+    filename = params[:csv_file][:filename]
+
+    connection = Faraday.new do |conn|
+      conn.request :multipart
+      conn.request :url_encoded
+      conn.adapter Faraday.default_adapter
+    end
+
+    response = connection.post('http://api:7777/import') do |request|
+      request.headers['Content-Type'] = 'multipart/form-data'
+      request.body = { csv_file: Faraday::UploadIO.new(tempfile.path, 'text/csv', filename) }
     end
   else
     flash[:error] = 'Nenhum arquivo enviado.'
   end
 
+  puts response.body
+
   redirect '/import'
 end
-

@@ -34,11 +34,11 @@
     </form>
   </div>
   <% if flash[:notice] %>
-    <div class="alert alert-info"><%= flash[:notice] %></div>
+    <div class="alert alert-info w-50"><%= flash[:notice] %></div>
   <% end %>
 
   <% if flash[:error] %>
-    <div class="alert alert-danger"><%= flash[:error] %></div>
+    <div class="alert alert-danger w-50"><%= flash[:error] %></div>
   <% end %>
   <%= yield %>
 </body>

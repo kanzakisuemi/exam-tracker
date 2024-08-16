@@ -3,11 +3,32 @@ require_relative 'models/exam_result'
 require_relative 'models/doctor'
 require_relative 'models/patient'
 require_relative '../db/initialize_db'
+require '/app/sidekiq/job'
+require 'csv'
+require 'json'
+require 'rack/cors'
+require 'rack/session/cookie'
+require 'securerandom'
 require 'sidekiq'
 require 'sinatra'
 require 'sinatra/json'
-require 'json'
-require 'csv'
+
+use Rack::Session::Cookie, 
+  key: 'rack.session', 
+  path: '/', 
+  secret: SecureRandom.hex(64),
+  same_site: :none,
+  secure: true
+
+use Rack::Cors do
+  allow do
+    origins 'http://web:8888'
+    resource '*',
+      headers: :any,
+      methods: [:get, :post, :put, :patch, :delete, :options, :head],
+      credentials: true
+  end
+end
 
 configure do
   set :layout, :layout
@@ -35,7 +56,7 @@ post '/import' do
     tempfile = params[:csv_file][:tempfile]
     csv_content = tempfile.read
     
-    result = Job.perform_async(csv_content)
+    result = CsvJob.perform_async(csv_content)
     
     content_type :json
     { message: 'Arquivo recebido e processamento iniciado!' }.to_json
@@ -71,5 +92,4 @@ get '/resultados' do
 end
 
 get '/' do
-  erb :index
 end
