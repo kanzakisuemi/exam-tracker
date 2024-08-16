@@ -6,7 +6,6 @@ require 'rack/cors'
 require 'rack/session/cookie'
 require 'securerandom'
 require 'sinatra'
-require 'sinatra/flash'
 require 'will_paginate'
 require 'will_paginate/array'
 
@@ -28,7 +27,6 @@ use Rack::Cors do
 end
 
 enable :sessions
-register Sinatra::Flash
 
 configure do
   set :layout, :layout
@@ -73,7 +71,6 @@ def fetch_exams_through_token(token)
 end
 
 get '/' do
-  puts 'Hello, world!'
   page = params[:page] ? params[:page].to_i : 1
   per_page = 15
   @pagination = fetch_formatted_exams(page:, per_page:)
@@ -105,11 +102,11 @@ post '/import' do
       request.headers['Content-Type'] = 'multipart/form-data'
       request.body = { csv_file: Faraday::UploadIO.new(tempfile.path, 'text/csv', filename) }
     end
-  else
-    flash[:error] = 'Nenhum arquivo enviado.'
+
+    puts response.body
+    puts "EU SOU UM PUUUUUTS"
+
+    @message = JSON.parse(response.body, symbolize_names: true)[:message]
+    erb :import
   end
-
-  puts response.body
-
-  redirect '/import'
 end

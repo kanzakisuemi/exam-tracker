@@ -22,7 +22,7 @@
     </div>
   </nav>
   <div class="alert border-0 rounded-0" style="background-color: lavender;">
-    <form action="/exams" method="get" class="d-flex">
+    <form action="/exams" method="get" class="input-group">
       <input
         placeholder="Informe o token do exame" 
         class="form-control" 
@@ -30,15 +30,11 @@
         name="token" 
         required
       >
-      <button type="submit" class="btn">Buscar</button>
+      <button type="submit" class="btn btn-info">Buscar</button>
     </form>
   </div>
-  <% if flash[:notice] %>
-    <div class="alert alert-info w-50"><%= flash[:notice] %></div>
-  <% end %>
-
-  <% if flash[:error] %>
-    <div class="alert alert-danger w-50"><%= flash[:error] %></div>
+  <% if @message %>
+    <div class="alert alert-warning w-50 mx-auto text-center"><%= @message %></div>
   <% end %>
   <%= yield %>
 </body>
