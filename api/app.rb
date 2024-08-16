@@ -43,27 +43,27 @@ end
 
 get '/exams/:token' do
   content_type :json
-  json Database.fetch_formatted_exams_by_token(params[:token])
+  # json Database.fetch_formatted_exams_by_token(params[:token])
+  json ResultFormatter.fetch_formatted_exams_by_token(params[:token])
 end
 
 get '/exams' do
   content_type :json
-  json Database.fetch_formatted_exams
+  json ResultFormatter.fetch_formatted_exams
 end
 
 post '/import' do
+  content_type :json
+
   if params[:csv_file]
     tempfile = params[:csv_file][:tempfile]
     csv_content = tempfile.read
     
-    result = CsvJob.perform_async(csv_content)
-    
-    content_type :json
+    CsvJob.perform_async(csv_content)
+
     { message: 'Arquivo recebido e processamento iniciado!' }.to_json
   else
-    status 400
-    content_type :json
-    { error: 'Nenhum arquivo enviado.' }.to_json
+    { message: 'Nenhum arquivo enviado!' }.to_json
   end
 end
 

@@ -1,21 +1,15 @@
-class DataInserter
-  def initialize(conn)
-    @conn = conn
-  end
-
-  def insert_data(data)
+module DataInserter
+  def self.insert_data(data, conn)
     data.each do |row|
-      insert_patient(row)
-      insert_doctor(row)
-      insert_exam(row)
-      insert_exam_result(row)
+      insert_patient(row, conn)
+      insert_doctor(row, conn)
+      insert_exam(row, conn)
+      insert_exam_result(row, conn)
     end
   end
 
-  private
-
-  def insert_patient(row)
-    @conn.exec_params(
+  def self.insert_patient(row, conn)
+    conn.exec_params(
       'INSERT INTO patients (cpf, name, email, birthday, address, city, state)
        VALUES ($1, $2, $3, $4, $5, $6, $7)
        ON CONFLICT (cpf) DO NOTHING',
@@ -31,8 +25,8 @@ class DataInserter
     )
   end
 
-  def insert_doctor(row)
-    @conn.exec_params(
+  def self.insert_doctor(row, conn)
+    conn.exec_params(
       'INSERT INTO doctors (crm, crm_state, name, email)
        VALUES ($1, $2, $3, $4)
        ON CONFLICT (crm) DO NOTHING',
@@ -45,8 +39,8 @@ class DataInserter
     )
   end
 
-  def insert_exam(row)
-    @conn.exec_params(
+  def self.insert_exam(row, conn)
+    conn.exec_params(
       'INSERT INTO exams (id_patient, id_doctor, token, type, date)
        VALUES (
          (SELECT id FROM patients WHERE cpf = $1),
@@ -66,13 +60,13 @@ class DataInserter
     )
   end
 
-  def insert_exam_result(row)
-    id_exam_result = @conn.exec_params(
+  def self.insert_exam_result(row, conn)
+    id_exam_result = conn.exec_params(
       'SELECT id FROM exams WHERE token = $1 AND type = $2 AND date = $3 LIMIT 1',
       [row['token resultado exame'], row['tipo exame'], Date.parse(row['data exame'])]
     )[0]['id'].to_i
 
-    @conn.exec_params(
+    conn.exec_params(
       'INSERT INTO exam_results (id_exam, type, limits, result)
        VALUES ($1, $2, $3, $4)
        ON CONFLICT (id_exam, type) DO NOTHING',

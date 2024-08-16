@@ -1,7 +1,4 @@
-require 'csv'
-require 'date'
-
-module CSVProcessor
+module CsvProcessor
   def self.read_from_csv(file)
     rows = CSV.parse(file, col_sep: ';')
     columns = rows.shift
@@ -14,5 +11,10 @@ module CSVProcessor
       row_hash
     end
   end
-end
 
+  def self.process_csv_file(csv_file)
+    conn = Database.connect_to_db
+    Database.create_all_tables(conn)
+    DataInserter.insert_data(read_from_csv(csv_file), conn)
+  end
+end

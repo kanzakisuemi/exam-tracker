@@ -13,7 +13,6 @@ gem 'redis'
 gem 'rubocop'
 gem 'sinatra'
 gem 'sinatra-contrib'
-gem 'sinatra-flash'
 gem 'sidekiq'
 gem 'will_paginate'
 

@@ -1,9 +1,6 @@
-class QueryExecutor
-  def initialize(conn)
-    @conn = conn
-  end
-
-  def fetch_raw_exams
+module DataFetcher
+  def self.fetch_raw_exams
+    conn = Database.connect_to_db
     query = <<-SQL
       SELECT
         e.token AS result_token,
@@ -28,11 +25,13 @@ class QueryExecutor
       LEFT JOIN exam_results er ON e.id = er.id_exam
     SQL
 
-    results = @conn.exec(query)
+    results = conn.exec(query)
+    conn.close
     results.map { |row| row }
   end
 
-  def fetch_raw_exams_by_token(token)
+  def self.fetch_raw_exams_by_token(token)
+    conn = Database.connect_to_db
     query = <<-SQL
       SELECT
         e.token AS result_token,
@@ -58,43 +57,9 @@ class QueryExecutor
       WHERE e.token = $1
     SQL
 
-    results = @conn.exec_params(query, [token])
+    results = conn.exec_params(query, [token])
+    conn.close
     results.map { |row| row }
-  end
-
-  def format_results(results)
-    results.group_by { |row| [row['result_token'], row['result_date'], row['cpf']] }.map do |(token, date, cpf), rows|
-      {
-        "result_token" => token,
-        "result_date" => date,
-        "cpf" => cpf,
-        "name" => rows.first['name'],
-        "email" => rows.first['email'],
-        "birthday" => rows.first['birthday'],
-        "doctor" => {
-          "crm" => rows.first['crm'],
-          "crm_state" => rows.first['crm_state'],
-          "name" => rows.first['doctor_name']
-        },
-        "exams" => rows.map do |row|
-          {
-            "type" => row['exam_type'],
-            "limits" => row['exam_type_range'],
-            "result" => row['exam_result']
-          }
-        end
-      }
-    end
-  end
-
-  def fetch_formatted_exams_by_token(token)
-    results = fetch_raw_exams_by_token(token)
-    format_results(results).first
-  end
-
-  def fetch_formatted_exams
-    results = fetch_raw_exams
-    format_results(results)
   end
 end
 
