@@ -1,26 +1,11 @@
+require 'active_support/core_ext/hash'
 require 'capybara/rspec'
-require 'capybara/firebug'
 require 'faraday'
 require 'json'
 require 'rack/test'
 require 'rspec'
 require 'selenium-webdriver'
-require_relative '../api/app'
-
-module ApiHelper  
-  def faraday_connection
-    @faraday_connection ||= Faraday.new(url: ENV['API_URL']) do |conn|
-      conn.adapter Faraday.default_adapter
-    end
-  end
-
-  def get_from_api(path, params = {})
-    response = faraday_connection.get(path, params)
-    JSON.parse(response.body) if response.success?
-  rescue Faraday::Error => e
-    raise "Failed to fetch data from API: #{e.message}"
-  end
-end
+require_relative '../app'
 
 Dir[File.join(__dir__, 'support', '**', '*.rb')].sort.each { |file| require file }
 
@@ -39,7 +24,6 @@ Capybara.register_driver :selenium_chrome do |app|
 end
 
 RSpec.configure do |config|
-  config.include ApiHelper
   Capybara.app = app
 
   config.expect_with :rspec do |expectations|
@@ -58,17 +42,9 @@ RSpec.configure do |config|
 
   config.before(:each, type: :web) do
     config.include Capybara::DSL
-    # Capybara.app_host = ENV['WEB_URL']
-    Capybara.app_host = 'http://web:8888'
-    Capybara.server_host = "web"
-    Capybara.server_port = "8888"
   end
 
   config.before(:each, type: :api) do
     config.include Rack::Test::Methods
-    # Capybara.app_host = ENV['API_URL']
-    Capybara.app_host = 'http://api:7777'
-    Capybara.server_host = 'api'
-    Capybara.server_port = '7777'
   end
 end

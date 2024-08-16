@@ -3,9 +3,11 @@ require_relative 'models/exam_result'
 require_relative 'models/doctor'
 require_relative 'models/patient'
 require_relative '../db/initialize_db'
+require 'sidekiq'
 require 'sinatra'
 require 'sinatra/json'
 require 'json'
+require 'csv'
 
 configure do
   set :layout, :layout
@@ -26,6 +28,22 @@ end
 get '/exams' do
   content_type :json
   json Database.fetch_formatted_exams
+end
+
+post '/import' do
+  if params[:csv_file]
+    tempfile = params[:csv_file][:tempfile]
+    csv_content = tempfile.read
+    
+    result = Job.perform_async(csv_content)
+    
+    content_type :json
+    { message: 'Arquivo recebido e processamento iniciado!' }.to_json
+  else
+    status 400
+    content_type :json
+    { error: 'Nenhum arquivo enviado.' }.to_json
+  end
 end
 
 get '/exames' do

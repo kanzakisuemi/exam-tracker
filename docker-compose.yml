@@ -17,7 +17,7 @@ services:
     volumes:
       - ".:/app"
     working_dir: /app
-    command: bash -c 'bundle install && ruby db/initialize_db.rb && bundle exec puma -C puma_api.rb'
+    command: bash -c 'bundle install --without test && ruby db/initialize_db.rb && bundle exec puma -C puma_api.rb'
     depends_on:
       - db
     environment:
@@ -32,22 +32,50 @@ services:
     volumes:
       - ".:/app"
     working_dir: /app
-    command: bash -c 'bundle install && bundle exec puma -C puma_web.rb'
+    command: bash -c 'bundle install --without test && bundle exec puma -C puma_web.rb'
     depends_on:
       - api
 
-  test:
+  test-api:
+    container_name: test-api
     image: ruby:3.1
     depends_on:
       - api
+    volumes:
+      - .:/app
+    working_dir: /app/api
+    command: bash -c 'bundle install && bundle exec rspec'
+
+  test-web:
+    container_name: test-web
+    image: ruby:3.1
+    depends_on:
       - web
     volumes:
       - .:/app
-    working_dir: /app
+    working_dir: /app/web
     command: bash -c 'bundle install && bundle exec rspec'
-    environment:
-      API_URL: "http://api:7777"
-      WEB_URL: "http://web:8888"
+  
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
 
+  sidekiq:
+    image: ruby:3.1
+    command: bash -c 'bundle install && bundle exec sidekiq -r ./sidekiq/*.rb'
+    volumes:
+      - ".:/app"
+    working_dir: /app
+    depends_on:
+      - redis
+      - api
+    environment:
+      REDIS_URL: redis://redis:6379
+      
 volumes:
   db-data:
+  redis_data:

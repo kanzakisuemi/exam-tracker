@@ -1,1 +1,46 @@
-<%= @data %>
+<% if @data.nil? %>
+  <div class="alert alert-warning w-50 mx-auto text-center">Não encontramos nenhum exame associado a esse token.</div>
+<% else %>
+  <p class="text-center">Exames para token <%= @data[:result_token] %></p>
+  <div class="card w-50 mx-auto p-3 mb-4" id='search_results'>
+
+    <h4 class="fw-light text-center"><%= @data[:name] %></h4>
+    <span class="d-block"><%= @data[:result_token] %></span>
+    <span class="d-block"><%= Date.parse(@data[:result_date]).strftime('%d/%m/%Y') %></span>
+    <div class="text-center">
+      <span class="d-block text-muted">informações do paciente</span>
+      <div>
+        <span class="text-muted">cpf</span>
+        <span class="fs-5"><%= @data[:cpf] %></span>
+      </div>
+      <div>
+        <span class="text-muted">email</span>
+        <span class="fs-5"><%= @data[:email] %></span>
+      </div>
+    </div>
+
+    <div class="text-center">
+      <span class="d-block text-muted">informações do médico</span>
+      <span class="text-muted">crm</span>
+      <span class="fs-5">
+        <%= @data[:doctor][:crm] %>
+        <%= @data[:doctor][:crm_state] %>
+      </span>
+      <span class="d-block"><%= @data[:doctor][:name] %></span>
+    </div>
+
+    <div class="d-flex justify-content-between gap-1 flex-wrap">
+      <% @data[:exams].each do |exam| %>
+        <div class="card mt-3" style="width: 49%;">
+          <div class="card-body">
+            <h5 class="card-title"><%= exam[:type] %></h5>
+            <span class="text-muted">média</span>
+            <span class=""> <%= exam[:limits] %></span>
+            <span class="text-muted">resultado</span>
+            <span class=""> <%= exam[:result] %></span>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

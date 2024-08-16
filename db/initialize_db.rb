@@ -265,5 +265,17 @@ module Database
     format_results(results)
   end
 end
+# Database.process_csv_file(File.read('db/data.csv'))
+Database.process_csv_file(File.read(File.join(__dir__, 'data.csv')))
+# require_relative 'db_connection'
+# require_relative 'tables_creator'
+# require_relative 'data_inserter'
+# require_relative 'csv_processor'
 
-Database.process_csv_file(File.read('db/data.csv'))
+# conn = DBConnection.connect
+# tables_creator = TablesCreator.new(conn)
+# tables_creator.create_all_tables
+
+# data = CSVProcessor.read_from_csv(File.read(File.join(__dir__, 'data.csv')))
+# data_inserter = DataInserter.new(conn)
+# data_inserter.insert_data(data)

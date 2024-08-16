@@ -15,17 +15,19 @@
   <% end %>
 </ul>
 
-<div class="alert d-flex justify-content-center mb-5">
-  <a href="?page=<%= @pagination[:current_page] - 1 %>" class="pagination-btn">Anterior</a>
+<% if @pagination[:total_pages] > 1 %>
+  <div class="alert d-flex justify-content-center mb-5">
+    <a href="?page=<%= @pagination[:current_page] - 1 %>" class="pagination-btn">Anterior</a>
 
-  <% (1..@pagination[:total_pages]).each do |page_number| %>
-    <a href="?page=<%= page_number %>" 
-      class="pagination-number 
-      <%= 'active' if page_number == @pagination[:current_page] %>"
-    >
-      <%= page_number %>
-    </a>
-  <% end %>
+    <% (1..@pagination[:total_pages]).each do |page_number| %>
+      <a href="?page=<%= page_number %>" 
+        class="pagination-number 
+        <%= 'active' if page_number == @pagination[:current_page] %>"
+      >
+        <%= page_number %>
+      </a>
+    <% end %>
 
-  <a href="?page=<%= @pagination[:current_page] + 1 %>" class="pagination-btn">Próximo</a>
-</div>
+    <a href="?page=<%= @pagination[:current_page] + 1 %>" class="pagination-btn">Próximo</a>
+  </div>
+<% end %>
