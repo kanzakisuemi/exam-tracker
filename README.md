@@ -17,7 +17,7 @@ Um projeto desenvolvido no Rebase Labs para o rastreamento e gerenciamento de ex
 - **Frontend:** HTML, CSS, JavaScript
 - **Banco de Dados:** PostgreSQL
 - **Containerização:** Docker
-- **Processamento Assíncrono:** Sidekiq
+- **Processamento Assíncrono:** Sidekiq e Redis
 
 ### Setup e Execução
 Esse projeto exige docker-compose para ser executado.
