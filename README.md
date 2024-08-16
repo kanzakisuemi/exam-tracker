@@ -7,7 +7,7 @@ Um projeto desenvolvido no Rebase Labs para o rastreamento e gerenciamento de ex
 - **Importação de Dados:** Importa dados de exames a partir de arquivos CSV para um banco de dados SQL. Inclui uma ferramenta para importar os dados de forma assíncrona.
  ![Screenshot 2024-08-16 at 10 49 46](https://github.com/user-attachments/assets/db60ee2f-b572-496d-9d46-42245f5a7502)
 - **Listagem de Exames:** Exibe uma lista de exames médicos em formato JSON e HTML.
- ![Design sem nome](https://github.com/user-attachments/assets/535f11eb-d96d-4e5b-aae9-9359c4f35352)
+ ![ScreenRecording2024-08-16at10 47 14-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/04edb6d1-4fa3-444f-b430-75e45057b58e)
 - **Detalhamento de Exames:** Permite a visualização dos detalhes de um exame específico com base em um token único.
  ![Screenshot 2024-08-16 at 9 23 01](https://github.com/user-attachments/assets/df5216ad-99b4-4966-9200-ef49dbe963e8)
 - **API e Web Interface:** Oferece endpoints para a importação de dados e visualização de exames.
