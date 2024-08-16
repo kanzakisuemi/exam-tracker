@@ -18,10 +18,8 @@ Um projeto desenvolvido no Rebase Labs para o rastreamento e gerenciamento de ex
 - **Processamento Assíncrono:** Sidekiq
 
 ### Setup e Execução
-
-- **Configuração do Ambiente:** Utilize Docker para configurar e rodar a aplicação e o banco de dados.
-- **Importação de Dados:** Execute o script `import_from_csv.rb` para popular o banco de dados com dados de exames.
-- **Execução da Aplicação:** Inicie a aplicação web para interagir com a API e visualizar os dados dos exames.
+Esse projeto exige docker-compose para ser executado.
+- **Configuração do Ambiente:** Para inicializar as apps (api e web), tanto quanto o banco de dados `docker-compose up`
 
 ### Endpoints da API
 
