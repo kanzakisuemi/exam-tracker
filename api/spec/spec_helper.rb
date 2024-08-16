@@ -3,6 +3,7 @@ require 'faraday'
 require 'json'
 require 'rack/test'
 require 'rspec'
+require 'sinatra'
 require 'selenium-webdriver'
 require_relative '../app'
 
@@ -44,6 +45,10 @@ RSpec.configure do |config|
   end
 
   config.before(:each, type: :api) do
+    config.include Rack::Test::Methods
+  end
+
+  config.after(:each, type: :request) do
     config.include Rack::Test::Methods
   end
 end

@@ -103,9 +103,6 @@ post '/import' do
       request.body = { csv_file: Faraday::UploadIO.new(tempfile.path, 'text/csv', filename) }
     end
 
-    puts response.body
-    puts "EU SOU UM PUUUUUTS"
-
     @message = JSON.parse(response.body, symbolize_names: true)[:message]
     erb :import
   end

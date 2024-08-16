@@ -13,6 +13,14 @@ def app
   Sinatra::Application
 end
 
+module RSpecMixin
+  include Rack::Test::Methods
+
+  def app
+    Sinatra::Application
+  end
+end
+
 Capybara.configure do |config|
   config.default_max_wait_time = 5
   config.default_driver = :rack_test
@@ -25,6 +33,7 @@ end
 
 RSpec.configure do |config|
   Capybara.app = app
+  config.include RSpecMixin
 
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
@@ -42,9 +51,5 @@ RSpec.configure do |config|
 
   config.before(:each, type: :web) do
     config.include Capybara::DSL
-  end
-
-  config.before(:each, type: :api) do
-    config.include Rack::Test::Methods
   end
 end

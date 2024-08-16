@@ -3,33 +3,36 @@
 <% else %>
   <p class="text-center">Exames para token <%= @data[:result_token] %></p>
   <div class="card w-50 mx-auto p-3 mb-4" id='search_results'>
-
-    <h4 class="fw-light text-center"><%= @data[:name] %></h4>
-    <span class="d-block"><%= @data[:result_token] %></span>
-    <span class="d-block"><%= Date.parse(@data[:result_date]).strftime('%d/%m/%Y') %></span>
     <div class="text-center">
-      <span class="d-block text-muted">informações do paciente</span>
-      <div>
-        <span class="text-muted">cpf</span>
-        <span class="fs-5"><%= @data[:cpf] %></span>
-      </div>
-      <div>
-        <span class="text-muted">email</span>
-        <span class="fs-5"><%= @data[:email] %></span>
-      </div>
+      <h4 class="fw-light"><%= @data[:name] %></h4>
+      <span class="text-muted">token da bateria de exames</span>
+      <span class=""><%= @data[:result_token] %></span>
+      <span class="text-muted">emissão do resultado</span>
+      <span class=""><%= Date.parse(@data[:result_date]).strftime('%d/%m/%Y') %></span>
     </div>
 
-    <div class="text-center">
-      <span class="d-block text-muted">informações do médico</span>
-      <span class="text-muted">crm</span>
-      <span class="fs-5">
-        <%= @data[:doctor][:crm] %>
-        <%= @data[:doctor][:crm_state] %>
-      </span>
-      <span class="d-block"><%= @data[:doctor][:name] %></span>
-    </div>
+    <div class="d-flex justify-content-between gap-1 flex-wrap mt-3">
+      <div class="p-3" style="width: 49%;">
+        <span class="d-block text-muted">informações do paciente</span>
+        <div>
+          <span class="text-muted">cpf</span>
+          <span class="fs-5 fw-light"><%= @data[:cpf] %></span>
+        </div>
+        <div>
+          <span class="text-muted">email</span>
+          <span class="fs-5 fw-light"><%= @data[:email] %></span>
+        </div>
+      </div>
 
-    <div class="d-flex justify-content-between gap-1 flex-wrap">
+      <div class="p-3 text-end" style="width: 49%;">
+        <span class="d-block text-muted">informações do médico</span>
+        <span class="d-block fs-5 fw-light"><%= @data[:doctor][:name] %></span>
+        <span class="text-muted">crm</span>
+        <span class="fs-5 fw-light">
+          <%= @data[:doctor][:crm] %>
+          <%= @data[:doctor][:crm_state] %>
+        </span>
+      </div>
       <% @data[:exams].each do |exam| %>
         <div class="card mt-3" style="width: 49%;">
           <div class="card-body">

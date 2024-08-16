@@ -11,6 +11,15 @@ RSpec.describe 'API Endpoints', type: :request do
     end
   end
 
+  describe 'GET /exams' do
+    it 'returns lots of formatted exams' do
+      get '/exams'
+      expect(last_response).to be_ok
+      expect(last_response.content_type).to eq 'application/json'
+      expect(last_response.body).to include FIRST_FORMATTED_EXAM.to_json
+    end
+  end
+
   describe 'GET /' do
     it 'renders the index page' do
       get '/'

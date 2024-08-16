@@ -1,19 +1,38 @@
 <p class="text-center">Exames</p>
-<ul class="list-group w-50 mb-4 mx-auto">
+<div class="accordion shadow-sm w-50 mx-auto" id="exams-accordion">
   <% @pagination[:exams].each do |exam| %>
-    <li class="list-group-item p-3">
-      <div>
-        <span class="text-muted">token</span>
-        <span class="fs-5"><%= exam[:result_token] %></span>
-        <span class="text-muted">paciente</span>
-        <span class="fs-5"><%= exam[:email] %></span>
-        <span class="fs-5"><%= exam[:name] %></span>
+    <div class="accordion-item">
+      <div class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#<%= exam[:result_token] %>" aria-expanded="false" aria-controls="<%= exam[:result_token] %>">
+          <span class="text-muted">paciente</span>
+          <span class="ms-3 fs-5 me-3"><%= exam[:name] %></span>
+        </button>
       </div>
-      <span class="text-muted">cpf</span>
-      <span class="fs-5"><%= exam[:cpf] %></span>
-    </li>
+      <div id="<%= exam[:result_token] %>" class="accordion-collapse collapse" data-bs-parent="#exams-accordion">
+        <div class="accordion-body">
+          <div>
+            <span class="text-muted">cpf</span>
+            <span class="fs-5 me-3"><%= exam[:cpf] %></span>
+          </div>
+          <div>
+            <span class="text-muted">email</span>
+            <span class="fs-5"><%= exam[:email] %></span>
+          </div>
+          <hr>
+          <div>
+            <span class="text-muted">token</span>
+            <span class="fs-5"><%= exam[:result_token] %></span>
+          </div>
+          <div>
+            <span class="text-muted">emissão do resultado</span>
+            <span class="fs-5"><%= Date.parse(exam[:result_date]).strftime('%d/%m/%Y') %></span>
+          </div>
+          <a href="/exams?token=<%= exam[:result_token] %>" class="btn btn-sm btn-primary mt-2">ver meus exames</a>
+        </div>
+      </div>
+    </div>
   <% end %>
-</ul>
+</div>
 
 <% if @pagination[:total_pages] > 1 %>
   <div class="alert d-flex justify-content-center mb-5">
