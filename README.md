@@ -22,6 +22,8 @@ Um projeto desenvolvido no Rebase Labs para o rastreamento e gerenciamento de ex
 ### Setup e Execução
 Esse projeto exige docker-compose para ser executado.
 - **Configuração do Ambiente:** Para inicializar as apps (api e web), tanto quanto o banco de dados `docker-compose up`
+- A app web pode ser acessada na porta 8888
+- A app api pode ser acessada na porta 7777
 
 ### Endpoints da API
 
@@ -68,107 +70,6 @@ docker-compose run --rm test-api
 
 ```bash
 docker-compose run --rm test-web
-```
-
-### Docker Compose
-
-Seu arquivo `docker-compose.yml` deve estar configurado como segue para rodar a aplicação e o banco de dados:
-
-```yaml
-version: '3'
-
-services:
-  db:
-    image: postgres:14
-    container_name: db
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: exam_db
-    volumes:
-      - db-data:/var/lib/postgresql/data
-
-  api:
-    image: ruby:3.1
-    ports:
-      - "7777:7777"
-    volumes:
-      - ".:/app"
-    working_dir: /app
-    command: bash -c 'bundle install --without test && ruby db/initialize_db.rb && bundle exec puma -C puma_api.rb'
-    depends_on:
-      - db
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: exam_db
-      REDIS_URL: redis://redis:6379
-
-  web:
-    image: ruby:3.1
-    ports:
-      - "8888:8888"
-    volumes:
-      - ".:/app"
-    working_dir: /app
-    command: bash -c 'bundle install --without test && bundle exec puma -C puma_web.rb'
-    depends_on:
-      - api
-  
-  redis:
-    image: redis:latest
-    container_name: redis
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-
-  sidekiq:
-    image: ruby:3.1
-    command: bash -c 'bundle install && bundle exec sidekiq -r ./sidekiq/*.rb'
-    volumes:
-      - ".:/app"
-    working_dir: /app
-    depends_on:
-      - redis
-      - api
-    environment:
-      REDIS_URL: redis://redis:6379
-
-  test-api:
-    container_name: test-api
-    image: ruby:3.1
-    depends_on:
-      - api
-    volumes:
-      - .:/app
-    working_dir: /app/api
-    command: bash -c 'bundle install && bundle exec rspec'
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: test_db
-      REDIS_URL: redis://redis:6379
-
-  test-web:
-    container_name: test-web
-    image: ruby:3.1
-    depends_on:
-      - web
-      - api
-    volumes:
-      - .:/app
-    working_dir: /app/web
-    command: bash -c 'bundle install && bundle exec rspec'
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: test_db
-      REDIS_URL: redis://redis:6379
-
-volumes:
-  db-data:
-  redis_data:
 ```
 
 ### About
