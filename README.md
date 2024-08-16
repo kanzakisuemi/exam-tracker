@@ -27,6 +27,12 @@ Esse projeto exige docker-compose para ser executado.
 
 ### Endpoints da API
 
+#### Acessar lista de Exames através do Token
+
+- **Método:** `GET`
+- **URL:** `/exams/:token`
+- **Descrição:** Retorna um json com exames associados a um token.
+
 #### Importar Dados
 
 - **Método:** `POST`
