@@ -43,8 +43,12 @@ end
 
 get '/exams/:token' do
   content_type :json
-  # json Database.fetch_formatted_exams_by_token(params[:token])
   json ResultFormatter.fetch_formatted_exams_by_token(params[:token])
+end
+
+get '/patient/:cpf' do
+  content_type :json
+  json ResultFormatter.fetch_formatted_exams_by_cpf(params[:cpf])
 end
 
 get '/exams' do

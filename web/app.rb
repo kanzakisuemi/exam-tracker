@@ -70,6 +70,14 @@ def fetch_exams_through_token(token)
   JSON.parse(json_response, symbolize_names: true)
 end
 
+def fetch_exams_through_cpf(cpf)
+  path = "http://api:7777/patient/#{cpf}"
+  json_response = Faraday.get(path).body
+  return nil if json_response.nil?
+
+  JSON.parse(json_response, symbolize_names: true)
+end
+
 get '/' do
   page = params[:page] ? params[:page].to_i : 1
   per_page = 15

@@ -64,7 +64,7 @@ services:
     volumes:
       - .:/app
     working_dir: /app/api
-    command: bash -c 'bundle install && bundle exec rspec'
+    command: bash -c 'bundle install && bundle exec rspec && rubocop'
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
@@ -80,7 +80,7 @@ services:
     volumes:
       - .:/app
     working_dir: /app/web
-    command: bash -c 'bundle install && bundle exec rspec'
+    command: bash -c 'bundle install && bundle exec rspec && rubocop'
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
