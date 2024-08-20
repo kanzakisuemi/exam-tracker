@@ -22,3 +22,11 @@
   font-weight: 600;
   border: 1px solid pink;
 }
+
+.bg-pink {
+  background-color: #FFCAD4;
+}
+
+.bg-lavender {
+  background-color: lavender;
+}

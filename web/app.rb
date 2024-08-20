@@ -26,8 +26,6 @@ use Rack::Cors do
   end
 end
 
-enable :sessions
-
 configure do
   set :layout, :layout
 end
@@ -91,10 +89,6 @@ get '/exams' do
   erb :exams
 end
 
-get '/import' do
-  erb :import
-end
-
 post '/import' do
   if params[:csv_file]
     tempfile = params[:csv_file][:tempfile]
@@ -112,6 +106,10 @@ post '/import' do
     end
 
     @message = JSON.parse(response.body, symbolize_names: true)[:message]
-    erb :import
+
+    page = params[:page] ? params[:page].to_i : 1
+    per_page = 15
+    @pagination = fetch_formatted_exams(page:, per_page:)
+    erb :index
   end
 end
