@@ -12,7 +12,7 @@
     </div>
 
     <div class="d-flex justify-content-between gap-1 flex-wrap mt-3">
-      <div class="p-3" style="width: 49%;">
+      <div class="p-3 w-49">
         <span class="d-block text-muted">informações do paciente</span>
         <div>
           <span class="text-muted">cpf</span>
@@ -24,7 +24,7 @@
         </div>
       </div>
 
-      <div class="p-3 text-end" style="width: 49%;">
+      <div class="p-3 text-end w-49">
         <span class="d-block text-muted">informações do médico</span>
         <span class="d-block fs-5 fw-light"><%= @data[:doctor][:name] %></span>
         <span class="text-muted">crm</span>
@@ -34,7 +34,7 @@
         </span>
       </div>
       <% @data[:exams].each do |exam| %>
-        <div class="card mt-3" style="width: 49%;">
+        <div class="card mt-3 w-49">
           <div class="card-body">
             <h5 class="card-title"><%= exam[:type] %></h5>
             <span class="text-muted">média</span>
