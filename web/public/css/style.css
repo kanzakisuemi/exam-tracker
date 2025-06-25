@@ -37,3 +37,7 @@
 .w-49 {
   width: 49%;
 }
+
+.btn.bg-pink:hover {
+  background-color: #FBAFB9;
+}

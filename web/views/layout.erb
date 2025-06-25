@@ -4,14 +4,17 @@
   <title>Exames Médicos WEB</title>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body x-data="{ modal: false }">
-  <nav class="navbar navbar-expand-lg bg-pink">
+  <nav class="navbar navbar-expand-lg bg-lavender">
     <div class="container-fluid">
-      <a class="navbar-brand" href="/">Rebase Labs</a>
+      <h2 class="mx-2"><i class="bi bi-hospital"></i></h2>
+      <a class="navbar-brand" href="/"> Rebase Labs</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon">
+        </span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
@@ -22,15 +25,15 @@
     </div>
   </nav>
   <div class="alert border-0 rounded-0 bg-lavender">
-    <form action="/exams" method="get" class="input-group">
+    <form action="/exams" method="get" class="input-group w-50 mx-auto">
       <input
-        placeholder="Informe o token do exame" 
+        placeholder="Qual o token do seu exame? ^^" 
         class="form-control" 
         type="text" id="token" 
         name="token" 
         required
       >
-      <button type="submit" class="btn btn-info">Buscar</button>
+      <button type="submit" class="btn bg-pink"><i class="bi bi-search"></i></button>
     </form>
   </div>
 
