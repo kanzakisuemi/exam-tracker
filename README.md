@@ -22,7 +22,8 @@ Um projeto desenvolvido no Rebase Labs para o rastreamento e gerenciamento de ex
 
 ### Setup e Execução
 Esse projeto exige docker-compose para ser executado.
-- **Configuração do Ambiente:** Para inicializar as apps (api e web), tanto quanto o banco de dados `docker-compose up`
+- **Configuração do Ambiente:** Para inicializar ambas as apps (api e web), tanto quanto o banco de dados:
+`docker-compose up`
 - A app web pode ser acessada na porta 8888
 - A app api pode ser acessada na porta 7777
 
